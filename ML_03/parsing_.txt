@@ -1,0 +1,23 @@
+import struct
+import numpy as np
+def parser(mode):  #return dictionary
+    data_dict={}
+    if mode=="training":
+        with open("train-images.idx3-ubyte","rb") as f1:
+            #header
+            image=np.zeros((0,28*28),dtype='uint8')#np.array([],dtype='uint8')
+            byte=f1.read(16)a
+            header=struct.unpack('>iiii',byte)
+            data_dict['header']=header
+            count=0
+            while True:
+                byte=list(f1.read(28*28))
+                if not byte:
+                    break
+                image_byte=np.array(byte,'uint8')
+                image=np.concatenate((image, image_byte.reshape((1,28*28))))
+                count+=1
+                if count%1000 ==0:
+                    print(count)
+            print(image.shape)
+            #print(count)
